@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/hashicorp/terraform-plugin-sdk/plugin"
-	"github.com/kyma-incubator/terraform-provider-kind/kind"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/plugin"
+	"github.com/marcwickenden/terraform-provider-kind/kind"
 )
 
 func main() {

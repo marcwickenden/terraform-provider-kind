@@ -2,10 +2,7 @@
 # Make sure to check the documentation at http://goreleaser.com
 before:
   hooks:
-    # You may remove this if you don't use go modules.
-    - go mod download
-    # you may remove this if you don't need go generate
-    - go generate ./...
+    - go mod tidy
 builds:
   - env:
       - CGO_ENABLED=0
@@ -13,17 +10,28 @@ builds:
     flags:
       - -trimpath
     ldflags:
-      - '-s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.Date}}'
+      - '-s -w -X main.version={{.Version}} -X main.commit={{.Commit}}'
     goos:
+      - freebsd
       - linux
       - windows
       - darwin
     goarch:
       - amd64
+      - '386'
+      - arm
+      - arm64
+    ignore:
+      - goos: darwin
+        goarch: '386'
+    binary: '{{ .ProjectName }}_v{{ .Version }}'
 archives:
   - format: tar.gz
     name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}'
 checksum:
+  extra_files:
+    - glob: 'terraform-registry-manifest.json'
+      name_template: '{{ .ProjectName }}_{{ .Version }}_manifest.json'
   name_template: '{{ .ProjectName }}_{{ .Version }}_SHA256SUMS'
   algorithm: sha256
 signs:
@@ -40,6 +48,9 @@ signs:
       - "${artifact}"
 release:
   # Visit your project's GitHub Releases page to publish this release.
+  extra_files:
+    - glob: 'terraform-registry-manifest.json'
+      name_template: '{{ .ProjectName }}_{{ .Version }}_manifest.json'
   draft: false
 changelog:
   skip: true
