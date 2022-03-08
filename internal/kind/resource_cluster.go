@@ -16,12 +16,10 @@ func resourceCluster() *schema.Resource {
 	return &schema.Resource{
 		Create: resourceKindClusterCreate,
 		Read:   resourceKindClusterRead,
-		// Update: resourceKindClusterUpdate,
 		Delete: resourceKindClusterDelete,
 
 		Timeouts: &schema.ResourceTimeout{
 			Create: schema.DefaultTimeout(defaultCreateTimeout),
-			Update: schema.DefaultTimeout(defaultUpdateTimeout),
 			Delete: schema.DefaultTimeout(defaultDeleteTimeout),
 		},
 
@@ -141,7 +139,7 @@ func resourceKindClusterRead(d *schema.ResourceData, meta interface{}) error {
 		return err
 	}
 	exportPath := fmt.Sprintf("%s%s%s-config", currentPath, string(os.PathSeparator), name)
-	err = provider.ExportKubeConfig(name, exportPath)
+	err = provider.ExportKubeConfig(name, exportPath, false)
 	if err != nil {
 		d.SetId("")
 		return err

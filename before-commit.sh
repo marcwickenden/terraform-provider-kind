@@ -95,7 +95,7 @@ goFilesToCheck=$(find . -type f -name "*.go" | egrep -v "\/vendor\/|_*/automock/
 ##
 if [ "$1" == "$TEST_ACC_FLAG" ] || [ "$2" == "$TEST_ACC_FLAG" ]; then
 	# run terraform acceptance tests
-	TF_ACC=1 go test ./kind -v -count 1 -parallel 20 -timeout 120m
+	TF_ACC=1 go test ./internal/kind -v -count 1 -parallel 20 -timeout 120m
 fi
 
 #
@@ -112,7 +112,7 @@ fi
 ##
 # GO VET
 ##
-packagesToVet=("./kind/...")
+packagesToVet=("./internal/kind/...")
 
 for vPackage in "${packagesToVet[@]}"; do
 	vetResult=$(go vet ${vPackage})
